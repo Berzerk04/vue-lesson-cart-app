@@ -12,7 +12,7 @@
     <!-- Lesson Page -->
     <div v-if="!showCart" class="lesson-list">
       <h1>Available Lessons</h1>
-      
+
       <!-- Sorting Section -->
       <div class="sort-options">
         <label for="sort-by">Sort by: </label>
@@ -37,10 +37,11 @@
           <p><strong>Price:</strong> ${{ lesson.price }}</p>
           <p><strong>Spaces Left:</strong> {{ lesson.spaces }}</p>
           <!-- Add to Cart Button -->
-          <button 
-            @click="addToCart(lesson)" 
+          <button
+            @click="addToCart(lesson)"
             :disabled="lesson.spaces === 0"
-            class="cart-btn">
+            class="cart-btn"
+          >
             Add to Cart
           </button>
         </li>
@@ -70,6 +71,12 @@
           <label for="name">Name:</label>
           <input type="text" v-model="name" @input="validateForm" />
 
+          <label for="email">Email:</label>
+          <input type="email" v-model="email" @input="validateForm" />
+
+          <label for="address">Address:</label>
+          <input type="text" v-model="address" @input="validateForm" />
+
           <label for="phone">Phone:</label>
           <input type="text" v-model="phone" @input="validateForm" />
 
@@ -86,7 +93,7 @@
 export default {
   data() {
     return {
-      showCart: false, // Toggle between lesson page and cart page
+      showCart: false,
       lessons: [
         { id: 1, subject: 'Math', location: 'Room 101', price: 50, spaces: 5 },
         { id: 2, subject: 'English', location: 'Room 102', price: 45, spaces: 5 },
@@ -99,38 +106,35 @@ export default {
         { id: 9, subject: 'Art', location: 'Room 109', price: 40, spaces: 5 },
         { id: 10, subject: 'Music', location: 'Room 110', price: 55, spaces: 5 }
       ],
-      cart: [], // Lessons added to the cart
-      sortAttribute: 'subject', // Default sort by subject
-      sortOrder: 'asc', // Default order ascending
-      name: '', // User name for checkout
-      phone: '', // User phone for checkout
-      isCheckoutEnabled: false, // Controls whether checkout is enabled
+      cart: [],
+      sortAttribute: 'subject',
+      sortOrder: 'asc',
+      name: '',
+      email: '',
+      address: '',
+      phone: '',
+      isCheckoutEnabled: false,
     };
   },
   computed: {
-    // Calculate total price of items in the cart
     totalPrice() {
       return this.cart.reduce((total, lesson) => total + lesson.price, 0);
     }
   },
   methods: {
-    // Toggle between the lesson list and shopping cart view
     toggleCart() {
       this.showCart = !this.showCart;
     },
-    // Add lesson to the cart and reduce available spaces
     addToCart(lesson) {
       if (lesson.spaces > 0) {
-        lesson.spaces--; // Reduce space count
-        this.cart.push(lesson); // Add lesson to the cart
+        lesson.spaces--;
+        this.cart.push(lesson);
       }
     },
-    // Remove lesson from the cart and return it to the lesson list
     removeFromCart(lesson, index) {
-      lesson.spaces++; // Increase space count
-      this.cart.splice(index, 1); // Remove lesson from cart
+      lesson.spaces++;
+      this.cart.splice(index, 1);
     },
-    // Sort lessons by the selected attribute and order
     sortLessons() {
       const attribute = this.sortAttribute;
       const order = this.sortOrder;
@@ -146,21 +150,25 @@ export default {
         return order === 'asc' ? comparison : -comparison;
       });
     },
-    // Validate the checkout form for name and phone
     validateForm() {
       const nameRegex = /^[A-Za-z\s]+$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const phoneRegex = /^[0-9]+$/;
 
       this.isCheckoutEnabled =
-        nameRegex.test(this.name) && phoneRegex.test(this.phone);
+        nameRegex.test(this.name) &&
+        emailRegex.test(this.email) &&
+        this.address.trim() !== '' &&
+        phoneRegex.test(this.phone);
     },
-    // Submit the order
     submitOrder() {
-      alert(`Order submitted for ${this.name} with phone ${this.phone}.`);
-      this.cart = []; // Clear cart after submission
+      alert(`Order submitted for ${this.name} at ${this.email}, address: ${this.address}, phone: ${this.phone}.`);
+      this.cart = [];
       this.name = '';
+      this.email = '';
+      this.address = '';
       this.phone = '';
-      this.isCheckoutEnabled = false; // Reset checkout form
+      this.isCheckoutEnabled = false;
     }
   }
 };
