@@ -68,14 +68,20 @@
       <div class="checkout-form">
         <h2>Checkout</h2>
         <form @submit.prevent="submitOrder">
-          <label for="name">Name:</label>
-          <input type="text" v-model="name" @input="validateForm" />
+          <label for="firstName">First Name:</label>
+          <input type="text" v-model="firstName" @input="validateForm" />
+
+          <label for="lastName">Last Name:</label>
+          <input type="text" v-model="lastName" @input="validateForm" />
 
           <label for="email">Email:</label>
           <input type="email" v-model="email" @input="validateForm" />
 
           <label for="address">Address:</label>
           <input type="text" v-model="address" @input="validateForm" />
+
+          <label for="city">City:</label>
+          <input type="text" v-model="city" @input="validateForm" />
 
           <label for="phone">Phone:</label>
           <input type="text" v-model="phone" @input="validateForm" />
@@ -109,9 +115,11 @@ export default {
       cart: [],
       sortAttribute: 'subject',
       sortOrder: 'asc',
-      name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       address: '',
+      city: '',
       phone: '',
       isCheckoutEnabled: false,
     };
@@ -156,17 +164,21 @@ export default {
       const phoneRegex = /^[0-9]+$/;
 
       this.isCheckoutEnabled =
-        nameRegex.test(this.name) &&
+        nameRegex.test(this.firstName) &&
+        nameRegex.test(this.lastName) &&
         emailRegex.test(this.email) &&
         this.address.trim() !== '' &&
+        this.city.trim() !== '' &&
         phoneRegex.test(this.phone);
     },
     submitOrder() {
-      alert(`Order submitted for ${this.name} at ${this.email}, address: ${this.address}, phone: ${this.phone}.`);
+      alert(`Order submitted for ${this.firstName} ${this.lastName}, email: ${this.email}, address: ${this.address}, city: ${this.city}, phone: ${this.phone}.`);
       this.cart = [];
-      this.name = '';
+      this.firstName = '';
+      this.lastName = '';
       this.email = '';
       this.address = '';
+      this.city = '';
       this.phone = '';
       this.isCheckoutEnabled = false;
     }
