@@ -1,11 +1,18 @@
 <template>
   <div class="app">
-    <!-- Shopping Cart Button -->
+    <!-- Button to Toggle Between Lesson List and Shopping Cart View -->
+    <!-- @click="toggleCart" is a click event that triggers the toggleCart method to switch views -->
+    <!-- :disabled is a dynamic attribute that disables the button if certain conditions are met:
+         - The button is disabled only when the cart is empty (cart.length === 0) and the user is on the lesson page (!showCart).
+         - If the user is on the cart page (showCart is true), the button remains active, allowing a return to lessons even if the cart is empty. -->
     <button
       @click="toggleCart"
       :disabled="!showCart && cart.length === 0"
       class="cart-toggle-btn"
     >
+      <!-- Button Text Changes Based on Current View -->
+      <!-- If showCart is true (user is viewing the cart), the button text shows "Back to Lessons".
+           Otherwise, if showCart is false (user is viewing lessons), the text displays "Go to Shopping Cart". -->
       {{ showCart ? "Back to Lessons" : "Go to Shopping Cart" }}
     </button>
 
