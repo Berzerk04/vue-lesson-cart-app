@@ -90,22 +90,42 @@
     </li>
   </ul>  
 </div>
+<!-- Cart Page Section -->
+<!-- This section displays the shopping cart if showCart is true, indicating the user is viewing their cart -->
+<div v-if="showCart" class="cart-page">
+  
+  <!-- Main Heading for the Cart Page -->
+  <h1>Your Shopping Cart</h1>
 
-      <!-- Cart Page -->
-      <div v-if="showCart" class="cart-page">
-        <h1>Your Shopping Cart</h1>
-        <p v-if="cart.length === 0">Your cart is empty.</p>
-        <ul>
-          <li v-for="(item, index) in cart" :key="item.id" class="cart-item">
-            <h2>{{ item.subject }}</h2>
-            <p><strong>Price:</strong> ${{ item.price }}</p>
-            <!-- Remove from Cart Button -->
-            <button @click="removeFromCart(item, index)" class="remove-btn">
-              Remove from Cart
-            </button>
-          </li>
-        </ul>
-        <p v-if="cart.length > 0"><strong>Total:</strong> ${{ totalPrice }}</p>
+  <!-- Message for an Empty Cart -->
+  <!-- Displays "Your cart is empty." if there are no items in the cart (cart.length is 0) -->
+  <p v-if="cart.length === 0">Your cart is empty.</p>
+
+  <!-- List of Items in the Cart -->
+  <ul>
+    <!-- Loops through each item in the cart array to display details for each one -->
+    <li v-for="(item, index) in cart" :key="item.id" class="cart-item">
+
+      <!-- Display the subject of the lesson added to the cart -->
+      <h2>{{ item.subject }}</h2>
+
+      <!-- Display the price of the lesson in the cart -->
+      <p><strong>Price:</strong> ${{ item.price }}</p>
+
+      <!-- Button to Remove the Lesson from the Cart -->
+      <!-- @click="removeFromCart(item, index)" triggers the removeFromCart method, passing both the item and its index to remove it from the cart array -->
+      <button @click="removeFromCart(item, index)" class="remove-btn">
+        Remove from Cart
+      </button>
+
+    </li>
+  </ul>
+
+  <!-- Total Price Display -->
+  <!-- Shows the total price of items in the cart if the cart contains at least one item -->
+  <p v-if="cart.length > 0"><strong>Total:</strong> ${{ totalPrice }}</p>
+
+</div> <!-- End of Cart Page Section -->
 
         <!-- Checkout Form -->
         <div class="checkout-form">
