@@ -43,7 +43,21 @@
 
       <ul>
         <li v-for="lesson in filteredLessons" :key="lesson.id" class="lesson-item">
-          <h2>{{ lesson.subject }}</h2>
+          <!-- Display subject with Font Awesome icon -->
+          <h2>
+            <!-- Conditional Icons based on Subject Name -->
+            <i v-if="lesson.subject === 'Math'" class="fas fa-calculator" aria-hidden="true"></i>
+            <i v-if="lesson.subject === 'English'" class="fas fa-book" aria-hidden="true"></i>
+            <i v-if="lesson.subject === 'Science'" class="fas fa-flask" aria-hidden="true"></i>
+            <i v-if="lesson.subject === 'History'" class="fas fa-landmark" aria-hidden="true"></i>
+            <i v-if="lesson.subject === 'Geography'" class="fas fa-globe" aria-hidden="true"></i>
+            <i v-if="lesson.subject === 'Physics'" class="fas fa-atom" aria-hidden="true"></i>
+            <i v-if="lesson.subject === 'Chemistry'" class="fas fa-vial" aria-hidden="true"></i>
+            <i v-if="lesson.subject === 'Biology'" class="fas fa-dna" aria-hidden="true"></i>
+            <i v-if="lesson.subject === 'Art'" class="fas fa-paint-brush" aria-hidden="true"></i>
+            <i v-if="lesson.subject === 'Music'" class="fas fa-music" aria-hidden="true"></i>
+            {{ lesson.subject }}
+          </h2>
           <p><strong>Location:</strong> {{ lesson.location }}</p>
           <p><strong>Price:</strong> ${{ lesson.price }}</p>
           <p><strong>Spaces Left:</strong> {{ lesson.spaces }}</p>
