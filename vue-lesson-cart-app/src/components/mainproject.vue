@@ -3,7 +3,7 @@
     <!-- Shopping Cart Button -->
     <button
       @click="toggleCart"
-      :disabled="cart.length === 0"
+      :disabled="!showCart && cart.length === 0"
       class="cart-toggle-btn"
     >
       {{ showCart ? "Back to Lessons" : "Go to Shopping Cart" }}
