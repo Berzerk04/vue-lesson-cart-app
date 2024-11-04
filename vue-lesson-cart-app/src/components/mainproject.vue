@@ -60,23 +60,36 @@
     </div> <!-- End of Sorting Section -->
   </div> <!-- End of Lesson Page Section -->
 
-        <ul>
-          <li v-for="lesson in lessons" :key="lesson.id" class="lesson-item">
-            <h2>{{ lesson.subject }}</h2>
-            <p><strong>Location:</strong> {{ lesson.location }}</p>
-            <p><strong>Price:</strong> ${{ lesson.price }}</p>
-            <p><strong>Spaces Left:</strong> {{ lesson.spaces }}</p>
-            <!-- Add to Cart Button -->
-            <button
-              @click="addToCart(lesson)"
-              :disabled="lesson.spaces === 0"
-              class="cart-btn"
-            >
-              Add to Cart
-            </button>
-          </li>
-        </ul>
-      </div>
+  <ul>
+    <!-- Loop through each lesson in the lessons array to display its details -->
+    <li v-for="lesson in lessons" :key="lesson.id" class="lesson-item">
+  
+      <!-- Display the subject of the lesson as a heading -->
+      <h2>{{ lesson.subject }}</h2>
+  
+      <!-- Display the location of the lesson -->
+      <p><strong>Location:</strong> {{ lesson.location }}</p>
+  
+      <!-- Display the price of the lesson -->
+      <p><strong>Price:</strong> ${{ lesson.price }}</p>
+  
+      <!-- Display the number of spaces left for the lesson -->
+      <p><strong>Spaces Left:</strong> {{ lesson.spaces }}</p>
+  
+      <!-- Button to add the lesson to the cart -->
+      <!-- @click="addToCart(lesson)" triggers the addToCart method with the selected lesson as a parameter -->
+      <!-- :disabled="lesson.spaces === 0" disables the button if no spaces are left for the lesson, preventing users from adding it to the cart -->
+      <button
+        @click="addToCart(lesson)"
+        :disabled="lesson.spaces === 0"
+        class="cart-btn"
+      >
+        Add to Cart
+      </button>
+      
+    </li>
+  </ul>  
+</div>
 
       <!-- Cart Page -->
       <div v-if="showCart" class="cart-page">
