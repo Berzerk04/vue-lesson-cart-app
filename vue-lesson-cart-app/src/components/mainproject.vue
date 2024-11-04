@@ -127,35 +127,56 @@
 
 </div> <!-- End of Cart Page Section -->
 
-        <!-- Checkout Form -->
-        <div class="checkout-form">
-          <h2>Checkout</h2>
-          <form @submit.prevent="submitOrder">
-            <label for="firstName">First Name:</label>
-            <input type="text" v-model="firstName" @input="validateForm" />
+<!-- Checkout Form Section -->
+<div class="checkout-form">
+  
+  <!-- Heading for the Checkout Section -->
+  <h2>Checkout</h2>
 
-            <label for="lastName">Last Name:</label>
-            <input type="text" v-model="lastName" @input="validateForm" />
+  <!-- Form for User Checkout Information -->
+  <!-- @submit.prevent="submitOrder" prevents the default form submission and triggers the submitOrder method to handle order submission -->
+  <form @submit.prevent="submitOrder">
+    
+    <!-- First Name Field -->
+    <label for="firstName">First Name:</label>
+    <!-- v-model="firstName" binds the input to the firstName data property, updating its value dynamically -->
+    <!-- @input="validateForm" triggers the validateForm method whenever the input changes, allowing for form validation in real-time -->
+    <input type="text" v-model="firstName" @input="validateForm" />
 
-            <label for="email">Email:</label>
-            <input type="email" v-model="email" @input="validateForm" />
+    <!-- Last Name Field -->
+    <label for="lastName">Last Name:</label>
+    <!-- Similar to First Name: binds the input to lastName and triggers validation on input -->
+    <input type="text" v-model="lastName" @input="validateForm" />
 
-            <label for="address">Address:</label>
-            <input type="text" v-model="address" @input="validateForm" />
+    <!-- Email Field -->
+    <label for="email">Email:</label>
+    <!-- v-model binds to email data property and validateForm checks for proper format -->
+    <input type="email" v-model="email" @input="validateForm" />
 
-            <label for="city">City:</label>
-            <input type="text" v-model="city" @input="validateForm" />
+    <!-- Address Field -->
+    <label for="address">Address:</label>
+    <!-- Collects the user's address, with real-time validation -->
+    <input type="text" v-model="address" @input="validateForm" />
 
-            <label for="phone">Phone:</label>
-            <input type="text" v-model="phone" @input="validateForm" />
+    <!-- City Field -->
+    <label for="city">City:</label>
+    <!-- Collects the city and updates city property in data -->
+    <input type="text" v-model="city" @input="validateForm" />
 
-            <button type="submit" :disabled="!isCheckoutEnabled" class="checkout-btn">
-              Checkout
-            </button>
-          </form>
-        </div>
-      </div>
-  </template>
+    <!-- Phone Field -->
+    <label for="phone">Phone:</label>
+    <!-- Bound to phone property and checked for numeric format by validateForm -->
+    <input type="text" v-model="phone" @input="validateForm" />
+
+    <!-- Submit Button for Checkout -->
+    <!-- :disabled="!isCheckoutEnabled" disables the button unless all required fields are valid as checked by validateForm -->
+    <button type="submit" :disabled="!isCheckoutEnabled" class="checkout-btn">
+      Checkout
+    </button>
+
+  </form>
+</div> <!-- End of Checkout Form Section -->
+</template>
 
   <script>
   export default {
