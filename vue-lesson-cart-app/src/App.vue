@@ -1,8 +1,17 @@
-<script setup>
-import HelloWorld from './components/mainproject.vue'
+<template>
+  <div id="app">
+    <h1>Hello Vue!</h1>
+  </div>
+</template>
 
+<script>
+export default {
+  name: 'App',
+};
 </script>
 
-<template>
-     <HelloWorld msg="You did it!" />
-</template>
+<style scoped>
+#app {
+  text-align: center;
+}
+</style>
