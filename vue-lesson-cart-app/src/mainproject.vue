@@ -66,6 +66,7 @@
       <ul>
         <li v-for="(item, index) in cart" :key="item._id" class="cart-item">
           <h2>{{ item.subject }}</h2>
+          <p><strong>Subject:</strong> {{ item.topic }}</p>
           <p><strong>Price:</strong> £{{ item.price }}</p>
           <button @click="removeFromCart(item, index)" class="remove-btn">
             Remove from Cart
@@ -133,7 +134,7 @@ export default {
   methods: {
     async fetchLessons() {
       try {
-        const response = await fetch("/api/lessons"); // Updated to use proxy
+        const response = await fetch("http://localhost:3000/lessons"); // Updated to use proxy
         if (!response.ok) {
           throw new Error("Failed to fetch lessons");
         }
@@ -200,7 +201,7 @@ export default {
       };
 
       try {
-        const response = await fetch("/api/orders", { // Updated to use proxy
+        const response = await fetch("http://localhost:3000/orders", { // Updated to use proxy
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -222,7 +223,8 @@ export default {
         this.city = "";
         this.phone = "";
         this.isCheckoutEnabled = true;
-      } catch (error) {
+      } 
+      catch (error) {
         console.error("Error submitting order:", error);
         alert("An error occurred while submitting your order. Please try again.");
       }
