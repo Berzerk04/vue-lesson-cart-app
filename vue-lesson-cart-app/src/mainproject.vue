@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <!-- Shopping Cart Button -->
+    <!-- Toggle Button for Cart -->
     <button
       @click="toggleCart"
       :disabled="!showCart && cart.length === 0"
@@ -9,7 +9,7 @@
       {{ showCart ? "Back to Lessons" : "Go to Shopping Cart" }}
     </button>
 
-    <!-- Lesson Page -->
+    <!-- Lesson List -->
     <div v-if="!showCart" class="lesson-list">
       <h1>Available Lessons</h1>
 
@@ -42,29 +42,15 @@
       </div>
 
       <ul>
-        <li v-for="lesson in filteredLessons" :key="lesson.id" class="lesson-item">
-          <!-- Display subject with Font Awesome icon -->
-          <h2>
-            <!-- Conditional Icons based on Subject Name -->
-            <i v-if="lesson.subject === 'Math'" class="fas fa-calculator" aria-hidden="true"></i>
-            <i v-if="lesson.subject === 'English'" class="fas fa-book" aria-hidden="true"></i>
-            <i v-if="lesson.subject === 'Science'" class="fas fa-flask" aria-hidden="true"></i>
-            <i v-if="lesson.subject === 'History'" class="fas fa-landmark" aria-hidden="true"></i>
-            <i v-if="lesson.subject === 'Geography'" class="fas fa-globe" aria-hidden="true"></i>
-            <i v-if="lesson.subject === 'Physics'" class="fas fa-atom" aria-hidden="true"></i>
-            <i v-if="lesson.subject === 'Chemistry'" class="fas fa-vial" aria-hidden="true"></i>
-            <i v-if="lesson.subject === 'Biology'" class="fas fa-dna" aria-hidden="true"></i>
-            <i v-if="lesson.subject === 'Art'" class="fas fa-paint-brush" aria-hidden="true"></i>
-            <i v-if="lesson.subject === 'Music'" class="fas fa-music" aria-hidden="true"></i>
-            {{ lesson.subject }}
-          </h2>
+        <li v-for="lesson in filteredLessons" :key="lesson._id" class="lesson-item">
+          <h2>{{ lesson.subject }}</h2>
+          <p><strong>Subject:</strong> {{ lesson.topic }}</p> 
           <p><strong>Location:</strong> {{ lesson.location }}</p>
-          <p><strong>Price:</strong> ${{ lesson.price }}</p>
-          <p><strong>Spaces Left:</strong> {{ lesson.spaces }}</p>
-          <!-- Add to Cart Button -->
+          <p><strong>Price:</strong> £{{ lesson.price }}</p>
+          <p><strong>Spaces Left:</strong> {{ lesson.space }}</p>
           <button
             @click="addToCart(lesson)"
-            :disabled="lesson.spaces === 0"
+            :disabled="lesson.space === 0"
             class="cart-btn"
           >
             Add to Cart
@@ -78,16 +64,15 @@
       <h1>Your Shopping Cart</h1>
       <p v-if="cart.length === 0">Your cart is empty.</p>
       <ul>
-        <li v-for="(item, index) in cart" :key="item.id" class="cart-item">
+        <li v-for="(item, index) in cart" :key="item._id" class="cart-item">
           <h2>{{ item.subject }}</h2>
-          <p><strong>Price:</strong> ${{ item.price }}</p>
-          <!-- Remove from Cart Button -->
+          <p><strong>Price:</strong> £{{ item.price }}</p>
           <button @click="removeFromCart(item, index)" class="remove-btn">
             Remove from Cart
           </button>
         </li>
       </ul>
-      <p v-if="cart.length > 0"><strong>Total:</strong> ${{ totalPrice }}</p>
+      <p v-if="cart.length > 0"><strong>Total:</strong> £{{ totalPrice }}</p>
 
       <!-- Checkout Form -->
       <div class="checkout-form">
@@ -125,49 +110,52 @@ export default {
   data() {
     return {
       showCart: false,
-      lessons: [
-        { id: 1, subject: 'Math', location: 'Room 101', price: 50, spaces: 5 },
-        { id: 2, subject: 'English', location: 'Room 102', price: 45, spaces: 5 },
-        { id: 3, subject: 'Science', location: 'Room 103', price: 60, spaces: 5 },
-        { id: 4, subject: 'History', location: 'Room 104', price: 55, spaces: 5 },
-        { id: 5, subject: 'Geography', location: 'Room 105', price: 50, spaces: 5 },
-        { id: 6, subject: 'Physics', location: 'Room 106', price: 65, spaces: 5 },
-        { id: 7, subject: 'Chemistry', location: 'Room 107', price: 70, spaces: 5 },
-        { id: 8, subject: 'Biology', location: 'Room 108', price: 60, spaces: 5 },
-        { id: 9, subject: 'Art', location: 'Room 109', price: 40, spaces: 5 },
-        { id: 10, subject: 'Music', location: 'Room 110', price: 55, spaces: 5 }
-      ],
+      lessons: [], // Lessons fetched from the backend
       cart: [],
-      sortAttribute: 'subject',
-      sortOrder: 'asc',
-      firstName: '',
-      lastName: '',
-      email: '',
-      address: '',
-      city: '',
-      phone: '',
+      sortAttribute: "subject",
+      sortOrder: "asc",
+      firstName: "",
+      lastName: "",
+      email: "",
+      address: "",
+      city: "",
+      phone: "",
       isCheckoutEnabled: false,
-      searchQuery: '', // Holds the search term entered by the user
-      filteredLessons: [] // Array to store lessons filtered by search term
+      searchQuery: "",
+      filteredLessons: [],
     };
   },
   computed: {
     totalPrice() {
       return this.cart.reduce((total, lesson) => total + lesson.price, 0);
-    }
+    },
   },
   methods: {
+    async fetchLessons() {
+      try {
+        const response = await fetch("/api/lessons"); // Updated to use proxy
+        if (!response.ok) {
+          throw new Error("Failed to fetch lessons");
+        }
+        const lessons = await response.json();
+        this.lessons = lessons;
+        this.filteredLessons = lessons; // Initialize filteredLessons
+      } catch (error) {
+        console.error("Error fetching lessons:", error);
+        alert("Failed to load lessons. Please try again later.");
+      }
+    },
     toggleCart() {
       this.showCart = !this.showCart;
     },
     addToCart(lesson) {
-      if (lesson.spaces > 0) {
-        lesson.spaces--;
+      if (lesson.space > 0) {
+        lesson.space--;
         this.cart.push(lesson);
       }
     },
     removeFromCart(lesson, index) {
-      lesson.spaces++;
+      lesson.space++;
       this.cart.splice(index, 1);
     },
     sortLessons() {
@@ -182,7 +170,7 @@ export default {
           comparison = 1;
         }
 
-        return order === 'asc' ? comparison : -comparison;
+        return order === "asc" ? comparison : -comparison;
       });
     },
     validateForm() {
@@ -194,33 +182,61 @@ export default {
         nameRegex.test(this.firstName) &&
         nameRegex.test(this.lastName) &&
         emailRegex.test(this.email) &&
-        this.address.trim() !== '' &&
-        this.city.trim() !== '' &&
+        this.address.trim() !== "" &&
+        this.city.trim() !== "" &&
         phoneRegex.test(this.phone);
     },
-    submitOrder() {
-      alert(`Order submitted for ${this.firstName} ${this.lastName}, email: ${this.email}, address: ${this.address}, city: ${this.city}, phone: ${this.phone}.`);
-      this.cart = [];
-      this.firstName = '';
-      this.lastName = '';
-      this.email = '';
-      this.address = '';
-      this.city = '';
-      this.phone = '';
-      this.isCheckoutEnabled = false;
+    async submitOrder() {
+      const orderDetails = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        phone: this.phone,
+        cart: this.cart.map((item) => ({
+          id: item._id,
+          subject: item.subject,
+          price: item.price,
+        })),
+        totalPrice: this.totalPrice,
+      };
+
+      try {
+        const response = await fetch("/api/orders", { // Updated to use proxy
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderDetails),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to submit order");
+        }
+
+        const data = await response.json();
+        alert("Order submitted successfully!");
+        this.cart = [];
+        this.firstName = "";
+        this.lastName = "";
+        this.email = "";
+        this.address = "";
+        this.city = "";
+        this.phone = "";
+        this.isCheckoutEnabled = true;
+      } catch (error) {
+        console.error("Error submitting order:", error);
+        alert("An error occurred while submitting your order. Please try again.");
+      }
     },
     filterLessons() {
-      // Filters lessons based on the searchQuery and stores results in filteredLessons
       const query = this.searchQuery.toLowerCase();
       this.filteredLessons = this.lessons.filter((lesson) =>
         lesson.subject.toLowerCase().includes(query)
       );
-    }
+    },
   },
   mounted() {
-    // Initialize filteredLessons to show all lessons on page load
-    this.filteredLessons = this.lessons;
-  }
+    this.fetchLessons();
+  },
 };
 </script>
 
