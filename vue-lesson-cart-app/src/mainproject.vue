@@ -188,47 +188,46 @@ export default {
         phoneRegex.test(this.phone);
     },
     async submitOrder() {
-      const orderDetails = {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        phone: this.phone,
-        cart: this.cart.map((item) => ({
-          id: item._id,
-          subject: item.subject,
-          price: item.price,
-        })),
-        totalPrice: this.totalPrice,
-      };
+  const orderDetails = {
+    firstName: this.firstName,
+    lastName: this.lastName,
+    phone: this.phone,
+    cart: this.cart.map((item) => ({
+      id: item._id,
+      subject: item.subject,
+      price: item.price,
+    })),
+    totalPrice: this.totalPrice,
+  };
 
-      try {
-        const response = await fetch("http://localhost:3000/orders", { // Updated to use proxy
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderDetails),
-        });
+  try {
+    const response = await fetch("http://localhost:3000/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderDetails),
+    });
 
-        if (!response.ok) {
-          throw new Error("Failed to submit order");
-        }
+    if (!response.ok) {
+      throw new Error("Failed to submit order");
+    }
 
-        const data = await response.json();
-        alert("Order submitted successfully!");
-        this.cart = [];
-        this.firstName = "";
-        this.lastName = "";
-        this.email = "";
-        this.address = "";
-        this.city = "";
-        this.phone = "";
-        this.isCheckoutEnabled = true;
-      } 
-      catch (error) {
-        console.error("Error submitting order:", error);
-        alert("An error occurred while submitting your order. Please try again.");
-      }
-    },
+    const data = await response.json();
+    alert(`Order submitted successfully! Order ID: ${data.orderId}`);
+    this.cart = [];
+    this.firstName = "";
+    this.lastName = "";
+    this.email = "";
+    this.address = "";
+    this.city = "";
+    this.phone = "";
+    this.isCheckoutEnabled = true;
+  } catch (error) {
+    console.error("Error submitting order:", error);
+    alert("An error occurred while submitting your order. Please try again.");
+  }
+},
     filterLessons() {
       const query = this.searchQuery.toLowerCase();
       this.filteredLessons = this.lessons.filter((lesson) =>
