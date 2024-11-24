@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/vue-lesson-cart-app/', 
+  base: '/vue-lesson-cart-app/', // Base path for GitHub Pages
   plugins: [
     vue(),
   ],
@@ -18,7 +18,7 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000', // Backend server URL
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''), // Removes '/api' prefix when forwarding requests
+        rewrite: (path) => path.replace(/^\/api/, ''), // Removes '/api' prefix
       },
     },
   },

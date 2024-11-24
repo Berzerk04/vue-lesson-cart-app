@@ -1,8 +1,8 @@
 <template>
   <div class="app">
-    <!-- Toggle Button for Cart -->
+    <!-- Button to toggle between showing the cart and the lessons view -->
     <button
-      @click="toggleCart"
+      @click="toggleCart" 
       :disabled="!showCart && cart.length === 0"
       class="cart-toggle-btn"
     >
@@ -42,7 +42,7 @@
       </div>
 
       <ul>
-        <li v-for="lesson in filteredLessons" :key="lesson._id" class="lesson-item">
+        <li v-for="lesson in filteredLessons" :key="lesson._id" class="lesson-item"> 
           <h2>{{ lesson.subject }}</h2>
           <p><strong>Subject:</strong> {{ lesson.topic }}</p> 
           <p><strong>Location:</strong> {{ lesson.location }}</p>
@@ -83,16 +83,16 @@
           <input type="text" v-model="firstName" @input="validateForm" />
 
           <label for="lastName">Last Name:</label>
-          <input type="text" v-model="lastName" @input="validateForm" />
+          <input type="text" v-model="lastName" />
 
           <label for="email">Email:</label>
-          <input type="email" v-model="email" @input="validateForm" />
+          <input type="email" v-model="email" />
 
           <label for="address">Address:</label>
-          <input type="text" v-model="address" @input="validateForm" />
+          <input type="text" v-model="address" />
 
           <label for="city">City:</label>
-          <input type="text" v-model="city" @input="validateForm" />
+          <input type="text" v-model="city" />
 
           <label for="phone">Phone:</label>
           <input type="text" v-model="phone" @input="validateForm" />
@@ -175,18 +175,13 @@ export default {
       });
     },
     validateForm() {
-      const nameRegex = /^[A-Za-z\s]+$/;
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phoneRegex = /^[0-9]+$/;
+  const nameRegex = /^[A-Za-z\s]+$/; // Regex to validate names (letters and spaces only)
+  const phoneRegex = /^[0-9]+$/; // Regex to validate phone numbers (digits only)
 
-      this.isCheckoutEnabled =
-        nameRegex.test(this.firstName) &&
-        nameRegex.test(this.lastName) &&
-        emailRegex.test(this.email) &&
-        this.address.trim() !== "" &&
-        this.city.trim() !== "" &&
-        phoneRegex.test(this.phone);
-    },
+  // Enable checkout only if First Name and Phone are valid
+  this.isCheckoutEnabled =
+    nameRegex.test(this.firstName) && phoneRegex.test(this.phone);
+},
     async submitOrder() {
   const orderDetails = {
     firstName: this.firstName,
