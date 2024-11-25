@@ -110,61 +110,61 @@
 export default {
   data() {
     return {
-      showCart: false,
+      showCart: false, // Tracks whether the cart modal is visible
       lessons: [], // Lessons fetched from the backend
-      cart: [],
-      sortAttribute: "subject",
-      sortOrder: "asc",
-      firstName: "",
-      lastName: "",
-      email: "",
-      address: "",
-      city: "",
-      phone: "",
-      isCheckoutEnabled: false,
-      searchQuery: "",
-      filteredLessons: [],
+      cart: [], // Stores lessons added to the cart
+      sortAttribute: "subject", // Attribute to sort the lessons
+      sortOrder: "asc", // Order for sorting (ascending)
+      firstName: "", // User's first name input
+      lastName: "", // User's last name input
+      email: "", // User's email input
+      address: "", // User's address input
+      city: "", // User's city input
+      phone: "", // User's phone number input
+      isCheckoutEnabled: false, // This determines if the checkout button is enabled
+      searchQuery: "", // User's input for filtering lessons
+      filteredLessons: [], // Filtered list of lessons based on the search
     };
   },
   computed: {
-    totalPrice() {
+    totalPrice() { // Calculates the total price of lessons in the cart
       return this.cart.reduce((total, lesson) => total + lesson.price, 0);
     },
   },
   methods: {
-    async fetchLessons() {
+    async fetchLessons() { // Fetches lessons from the backend API
       try {
-        const response = await fetch("http://localhost:3000/lessons"); // Updated to use proxy
+        const response = await fetch("http://localhost:3000/lessons"); // Sends a GET request to the lessons endpoint
         if (!response.ok) {
-          throw new Error("Failed to fetch lessons");
+          throw new Error("Failed to fetch lessons"); // Handles failed requests
         }
-        const lessons = await response.json();
-        this.lessons = lessons;
+        const lessons = await response.json(); //Parse the JSON responses
+        this.lessons = lessons; // Stores fetched lessons in the component state
         this.filteredLessons = lessons; // Initialize filteredLessons
       } catch (error) {
-        console.error("Error fetching lessons:", error);
-        alert("Failed to load lessons. Please try again later.");
+        console.error("Error fetching lessons:", error); //Logs errors to debug
+        alert("Failed to load lessons. Please try again later."); // Informs the user of the Error
       }
     },
-    toggleCart() {
+    toggleCart() { // Toggles the visibility of the cart 
       this.showCart = !this.showCart;
     },
-    addToCart(lesson) {
-      if (lesson.space > 0) {
-        lesson.space--;
-        this.cart.push(lesson);
+    addToCart(lesson) { // Adds a lesson to the Cart
+      if (lesson.space > 0) { // This line ensures that the lesson has available space
+        lesson.space--; // Decrements the available space
+        this.cart.push(lesson); // Add the lesson to the cart
       }
     },
-    removeFromCart(lesson, index) {
-      lesson.space++;
-      this.cart.splice(index, 1);
+    removeFromCart(lesson, index) { // Removes a lesson from the cart
+      lesson.space++; // Increment the available space
+      this.cart.splice(index, 1); // Remove the lesson from the cart at the specified index
     },
-    sortLessons() {
-      const attribute = this.sortAttribute;
-      const order = this.sortOrder;
+    sortLessons() { // Sorts lessons based on the selected attribute and order
+      const attribute = this.sortAttribute; // attribute to sort by
+      const order = this.sortOrder; // order to sort (ascending or descending)
 
       this.filteredLessons.sort((a, b) => {
-        let comparison = 0;
+        let comparison = 0; // This initializes the comparison variable to 0
         if (a[attribute] < b[attribute]) {
           comparison = -1;
         } else if (a[attribute] > b[attribute]) {
@@ -174,7 +174,7 @@ export default {
         return order === "asc" ? comparison : -comparison;
       });
     },
-    validateForm() {
+    validateForm() { // Validates the checkout form inputs as required
   const nameRegex = /^[A-Za-z\s]+$/; // Regex to validate names (letters and spaces only)
   const phoneRegex = /^[0-9]+$/; // Regex to validate phone numbers (digits only)
 
@@ -182,10 +182,10 @@ export default {
   this.isCheckoutEnabled =
     nameRegex.test(this.firstName) && phoneRegex.test(this.phone);
 },
-    async submitOrder() {
+    async submitOrder() { // Submits the user's order to the baclend
   const orderDetails = {
-    firstName: this.firstName,
-    lastName: this.lastName,
+    firstName: this.firstName, 
+    lastName: this.lastName, 
     phone: this.phone,
     cart: this.cart.map((item) => ({
       id: item._id,
@@ -199,39 +199,39 @@ export default {
     const response = await fetch("http://localhost:3000/orders", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", // Content type for JSON
       },
-      body: JSON.stringify(orderDetails),
+      body: JSON.stringify(orderDetails), // Send order details as JSON
     });
 
     if (!response.ok) {
-      throw new Error("Failed to submit order");
+      throw new Error("Failed to submit order"); // Handles failed responses
     }
 
-    const data = await response.json();
-    alert(`Order submitted successfully! Order ID: ${data.orderId}`);
-    this.cart = [];
-    this.firstName = "";
+    const data = await response.json(); // Parse the JSON response
+    alert(`Order submitted successfully! Order ID: ${data.orderId}`); // Notify the user of successful order which is displayed
+    this.cart = []; // Clears the cart
+    this.firstName = ""; // Resets the form fields
     this.lastName = "";
     this.email = "";
     this.address = "";
     this.city = "";
     this.phone = "";
-    this.isCheckoutEnabled = true;
+    this.isCheckoutEnabled = true; // Re-enable checkout
   } catch (error) {
-    console.error("Error submitting order:", error);
-    alert("An error occurred while submitting your order. Please try again.");
+    console.error("Error submitting order:", error); // Log errors for debugging
+    alert("An error occurred while submitting your order. Please try again."); // Notifies the user of the error
   }
 },
-    filterLessons() {
-      const query = this.searchQuery.toLowerCase();
+    filterLessons() { // Filters the lessons based on the search query
+      const query = this.searchQuery.toLowerCase(); // Converts the query to lowercase for case-insensitive matching
       this.filteredLessons = this.lessons.filter((lesson) =>
-        lesson.subject.toLowerCase().includes(query)
+        lesson.subject.toLowerCase().includes(query) // Check if the subject includes the query
       );
     },
   },
   mounted() {
-    this.fetchLessons();
+    this.fetchLessons(); // Fetch lessons when the component is mounted
   },
 };
 </script>
